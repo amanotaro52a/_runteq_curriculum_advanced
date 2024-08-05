@@ -1,21 +1,7 @@
 class ArticlesController < ApplicationController
   skip_before_action :require_login
   def index
-    @articles = if params[:tag_slug].present?
-                  set_tag
-                  @tag.articles
-                elsif params[:author_slug].present?
-                  set_author
-                  @author.articles
-                elsif params[:category_slug].present?
-                  set_category
-                  @category.articles
-                else
-                  hide_new_arrivals!
-                  hide_pagination!
-                  Article.all
-                end
-
+    @articles = fetch_articles
     @articles = @articles.new_arrivals.page(params[:page]).per(20)
   end
 
@@ -25,6 +11,23 @@ class ArticlesController < ApplicationController
   end
 
   private
+
+  def fetch_articles
+    if params[:tag_slug].present?
+      set_tag
+      @tag.articles
+    elsif params[:author_slug].present?
+      set_author
+      @author.articles
+    elsif params[:category_slug].present?
+      set_category
+      @category.articles
+    else
+      hide_new_arrivals!
+      hide_pagination!
+      Article.all
+    end
+  end
 
   def set_tag
     @tag = Tag.find_by!(slug: params[:tag_slug])
