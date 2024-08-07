@@ -1,0 +1,5 @@
+- embed = local_assigns[:embed]
+
+.embed-twitter
+  = content_tag 'blockquote', nil, class: 'twitter-tweet', data: { tweet_id: embed.identifier }
+  = javascript_tag "twttr.widgets.load();"
