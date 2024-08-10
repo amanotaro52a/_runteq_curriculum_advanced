@@ -10,10 +10,14 @@ set :output, "#{Rails.root}/log/cron.log"
 #
 # set :output, "/path/to/my/cron_log.log"
 #
-every 1.hours do
+every :hour do
 #   command "/usr/bin/some_great_command"
 #   runner "MyModel.some_method"
   rake 'article_state:update_article_state'
+end
+
+every 1.day, at: '9am' do
+  rake 'article_summary:mail_article_summary'
 end
 #
 # every 4.days do

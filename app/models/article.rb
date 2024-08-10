@@ -63,13 +63,13 @@ class Article < ApplicationRecord
 
   scope :viewable, -> { published.where('published_at < ?', Time.current) }
   scope :new_arrivals, -> { viewable.order(published_at: :desc) }
-  scope :by_category, ->(category_id) { where(category_id: category_id) }
-  scope :title_contain, ->(word) { where('title LIKE ?', "%#{word}%") }
   scope :by_author, ->(author_id) { where(author_id: author_id) }
+  scope :by_category, ->(category_id) { where(category_id: category_id) }
   scope :by_tag, ->(tag_id) { joins(:article_tags).where(article_tags: { tag_id: tag_id }) }
-  scope :body_contain, ->(word) { joins(:sentences).where('sentences.body LIKE ?', "%#{word}%") }
+  scope :title_contain, ->(word) { where('title LIKE ?', "%#{word}%") }
+  scope :body_contain, ->(body) { joins(:sentences).merge(where('sentences.body LIKE ?', "%#{body}%")) }
   scope :past_published, -> { where('published_at <= ?', Time.current) }
-
+  scope :published_at_yesterday, -> { published.where(published_at: 1.day.ago.all_day) }
   def build_body(controller)
     result = ''
 
