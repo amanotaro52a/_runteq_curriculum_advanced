@@ -96,3 +96,4 @@ docker attach コンテナ名
 
 `localhost:3000/login_as/1` にアクセス
 ※ 1はユーザーIDなのでDBに入っているユーザーのIDによって異なることがあります。
+# _runteq_curriculum_advanced
